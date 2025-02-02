@@ -171,25 +171,38 @@
       // defining the geometry of the point
       const point = { //Create a point  
         type: "point",  
-        longitude: -87.906471,    //Milwaukee WI
-        latitude: 43.038902
+        longitude: -88.062317,    //Green Bay WI
+        latitude: 44.501308
       };
 
-
+      // diamond piont marker at above location
       const simpleMarkerSymbol = {  
         type: "simple-marker",  
         style: "diamond", // Change shape to diamond
-        color: [0, 0, 139],  // Color of blues rock
+        color: [20, 90, 50],  // Color of blues rock
         outline: {  
-          color: [255, 255, 255], // White  
+          color: [247, 220, 111], // White  
           width: 1
       }  
-};
+      };
+
+
+      const popupTemplate = {
+        title: "{Name}",
+        content: "{Description}"
+      }
+      const attributes = {
+        Name: "Lambeau Field, Green Bay, WI",
+        Description: "The Frozen Tundra"
+      }
 
 
       const pointGraphic = new Graphic({  
         geometry: point,  
-        symbol: simpleMarkerSymbol  
+        symbol: simpleMarkerSymbol,
+        
+        attributes: attributes,
+        popupTemplate: popupTemplate
       });
 
 
