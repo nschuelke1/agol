@@ -24,9 +24,11 @@
       "esri/layers/TileLayer",
       "esri/widgets/Locate",
       "esri/widgets/Search",
-      "esri/Graphic"
-    ], function(esriConfig, Map, MapView, BasemapGallery, Expand, Basemap, VectorTileLayer, TileLayer, Locate, Search, Graphic) {
+      "esri/Graphic",
+      "esri/layers/GraphicsLayer"
+    ], function(esriConfig, Map, MapView, BasemapGallery, Expand, Basemap, VectorTileLayer, TileLayer, Locate, Search, Graphic, GraphicsLayer) {
       
+      // API Key
       esriConfig.apiKey = "AAPTxy8BH1VEsoebNVZXo8HurA_2jA8sPPf_DuV7jRLl5PwtnXSU0EiBd11SD4M-Bxw0UrhfHaqUrAK--XK5L5IK0j28evlBaArQSY23aC17Qiito1RjB1Qy8H8S3JClycEmD7Dd99TBLzTwbaUKyLLbYpVSKpqvRsPyfR0-Ry3hlX6PAyhZuz4NKltWCs0OfwyH850FW-GsaTgcch8s7YzVFUQMQosdGZq291wfW8Q1n9bLJumMXkL8G1QxaFPp8DCUAT1_warqfXUg";
       
       const map = new Map({ 
@@ -39,6 +41,7 @@
         zoom: 17, // Zoom level
         container: "viewDiv" // Div element
       });
+
 
       // Define ArcGIS Pro standard basemaps
       const imagery = new Basemap({
@@ -158,6 +161,39 @@
         position: "top-left",
         index: 0
       });
+
+
+
+      // adding the constructor for the graphicsLayer
+      const graphicsLayer = new GraphicsLayer();  
+        map.add(graphicsLayer);
+
+      // defining the geometry of the point
+      const point = { //Create a point  
+        type: "point",  
+        longitude: -87.906471,    //Milwaukee WI
+        latitude: 43.038902
+      };
+
+
+      const simpleMarkerSymbol = {  
+        type: "simple-marker",  
+        style: "diamond", // Change shape to diamond
+        color: [0, 0, 139],  // Color of blues rock
+        outline: {  
+          color: [255, 255, 255], // White  
+          width: 1
+      }  
+};
+
+
+      const pointGraphic = new Graphic({  
+        geometry: point,  
+        symbol: simpleMarkerSymbol  
+      });
+
+
+        graphicsLayer.add(pointGraphic);
 
     });  
    </script>
