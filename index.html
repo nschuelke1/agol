@@ -37,72 +37,106 @@
 
       const view = new MapView({
         map: map,
-        center: [-88.2342, 43.0148], // Longitude, latitude
+        center: [-88.062317, 44.501308], // Longitude, latitude of Green Bay, WI
         zoom: 17, // Zoom level
         container: "viewDiv" // Div element
       });
 
+      // adding the constructor for the graphicsLayer
+      const graphicsLayer = new GraphicsLayer();  
+      map.add(graphicsLayer);
 
-      // Define ArcGIS Pro standard basemaps
-      const imagery = new Basemap({
-        baseLayers: [
-          new TileLayer({
-            portalItem: { // autocasts as new PortalItem()
-              id: "86de37b1ebf44443b5f04f0dc8c9f51d" // World Imagery
-            }
-          })
-        ],
-        title: "Imagery",
-        id: "imagery"
+      // diamond point marker at above location
+      const simpleMarkerSymbol = {  
+        type: "simple-marker",  
+        style: "diamond", // Change shape to diamond
+        color: [20, 90, 50],  // Color of blues rock
+        outline: {  
+          color: [247, 220, 111], // White  
+          width: 1
+        }
+      };
+
+      // defining the geometry of the point
+      const point = { 
+        type: "point",  
+        longitude: -88.062317,    // Longitude of Lambeau Field
+        latitude: 44.501308       // Latitude of Lambeau Field
+      };
+
+      const popupTemplate = {
+        title: "{Name}",
+        content: "{Description}"
+      };
+
+      const attributes = {
+        Name: "Lambeau Field, Green Bay, WI",
+        Description: "The Frozen Tundra"
+      };
+
+      const pointGraphic = new Graphic({  
+        geometry: point,  
+        symbol: simpleMarkerSymbol,
+        attributes: attributes,
+        popupTemplate: popupTemplate
       });
 
-      const imageryHybrid = new Basemap({
-        baseLayers: [
-          new TileLayer({
-            portalItem: { // autocasts as new PortalItem()
-              id: "83b9c27b2bf04d019a06cf71f1c181a6" // Imagery Hybrid
-            }
-          })
-        ],
-        title: "Imagery Hybrid",
-        id: "imageryHybrid"
+      graphicsLayer.add(pointGraphic);
+
+      // Define the polygon's geometry
+      const polygon = {
+        type: "polygon",
+        rings: [
+          [-88.0634, 44.5036], // Polygon of Lambeau Field Property
+          [-88.0654, 44.5005],
+          [-88.0591, 44.4987],
+          [-88.0572, 44.5015],
+    
+        ]
+      };
+
+      // Define the symbol for the polygon
+      const fillSymbol = {
+        type: "simple-fill",
+        color: [51, 204, 51, 0.25], // Green color with transparency
+        outline: {
+          color: [0, 0, 0],
+          width: 1
+        }
+      };
+
+      // Create the polygon graphic and add to graphicsLayer
+      const polygonGraphic = new Graphic({
+        geometry: polygon,
+        symbol: fillSymbol
       });
 
-      const streets = new Basemap({
-        baseLayers: [
-          new TileLayer({
-            portalItem: { // autocasts as new PortalItem()
-              id: "8d91bd39e873417ea21673e0fee87604" // World Street Map
-            }
-          })
-        ],
-        title: "Streets",
-        id: "streets"
+      graphicsLayer.add(polygonGraphic);
+
+      // Define the polyline's geometry
+      const polyline = {
+        type: "polyline",
+        paths: [
+          [-88.045136, 44.496216], // Tundra Lodge to Lambeau Field
+          [-88.044579, 44.497364], // 
+          [-88.056895, 44.501618]
+        ]
+      };
+
+      // Define the symbol for the polyline
+      const lineSymbol = {
+        type: "simple-line",
+        color: [226, 119, 40], // Orange
+        width: 2
+      };
+
+      // Create the polyline graphic and add to graphicsLayer
+      const polylineGraphic = new Graphic({
+        geometry: polyline,
+        symbol: lineSymbol
       });
 
-      const topographic = new Basemap({
-        baseLayers: [
-          new TileLayer({
-            portalItem: { // autocasts as new PortalItem()
-              id: "0f62f2085d2e4ec2b4686df7a5e9a3a3" // World Topographic Map
-            }
-          })
-        ],
-        title: "Topographic",
-        id: "topographic"
-      });
-
-      const navigation = new Basemap({
-        baseLayers: [
-          new TileLayer({
-            portalItem: { // autocasts as new PortalItem()
-              id: "dcbbba0edf094eaa81af19298b9c6247" // Navigation
-            }
-          })
-        ],
-        title: "Navigation",
-        id: "navigation"
-      });
+      graphicsLayer.add(polylineGraphic);
 
       // Create the BasemapGallery widget
       const basemapGallery = new BasemapGallery({
@@ -161,52 +195,6 @@
         position: "top-left",
         index: 0
       });
-
-
-
-      // adding the constructor for the graphicsLayer
-      const graphicsLayer = new GraphicsLayer();  
-        map.add(graphicsLayer);
-
-      // defining the geometry of the point
-      const point = { //Create a point  
-        type: "point",  
-        longitude: -88.062317,    //Green Bay WI
-        latitude: 44.501308
-      };
-
-      // diamond piont marker at above location
-      const simpleMarkerSymbol = {  
-        type: "simple-marker",  
-        style: "diamond", // Change shape to diamond
-        color: [20, 90, 50],  // Color of blues rock
-        outline: {  
-          color: [247, 220, 111], // White  
-          width: 1
-      }  
-      };
-
-
-      const popupTemplate = {
-        title: "{Name}",
-        content: "{Description}"
-      }
-      const attributes = {
-        Name: "Lambeau Field, Green Bay, WI",
-        Description: "The Frozen Tundra"
-      }
-
-
-      const pointGraphic = new Graphic({  
-        geometry: point,  
-        symbol: simpleMarkerSymbol,
-        
-        attributes: attributes,
-        popupTemplate: popupTemplate
-      });
-
-
-        graphicsLayer.add(pointGraphic);
 
     });  
    </script>
