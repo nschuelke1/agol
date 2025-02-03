@@ -25,8 +25,9 @@
       "esri/widgets/Locate",
       "esri/widgets/Search",
       "esri/Graphic",
-      "esri/layers/GraphicsLayer"
-    ], function(esriConfig, Map, MapView, BasemapGallery, Expand, Basemap, VectorTileLayer, TileLayer, Locate, Search, Graphic, GraphicsLayer) {
+      "esri/layers/GraphicsLayer",
+      "esri/layers/FeatureLayer"
+    ], function(esriConfig, Map, MapView, BasemapGallery, Expand, Basemap, VectorTileLayer, TileLayer, Locate, Search, Graphic, GraphicsLayer, FeatureLayer) {
       
       // API Key
       esriConfig.apiKey = "AAPTxy8BH1VEsoebNVZXo8HurA_2jA8sPPf_DuV7jRLl5PwtnXSU0EiBd11SD4M-Bxw0UrhfHaqUrAK--XK5L5IK0j28evlBaArQSY23aC17Qiito1RjB1Qy8H8S3JClycEmD7Dd99TBLzTwbaUKyLLbYpVSKpqvRsPyfR0-Ry3hlX6PAyhZuz4NKltWCs0OfwyH850FW-GsaTgcch8s7YzVFUQMQosdGZq291wfW8Q1n9bLJumMXkL8G1QxaFPp8DCUAT1_warqfXUg";
@@ -137,6 +138,15 @@
       });
 
       graphicsLayer.add(polylineGraphic);
+
+
+      const usaeduLayer = new FeatureLayer({
+        url: "https://services2.arcgis.com/FiaPA4ga0iQKduv3/arcgis/rest/services/Colleges_and_Universities_View/FeatureServer"
+      });
+
+
+      map.add(usaeduLayer);
+
 
       // Create the BasemapGallery widget
       const basemapGallery = new BasemapGallery({
