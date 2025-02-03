@@ -139,61 +139,32 @@
 
       // Define the popup for usaeduLayer
       const popupEduusa = {
-        title: "EDUs",
-        content: "<b>Name:</b> {INSTNM}<br><b>Total Enrollment:</b> {INSTSIZE}<br>"
+        title: "{INSTNM}",
+        content: `
+          <b>Address:</b> {ADDR}, {CITY}, {STABBR} {ZIP}<br>
+          <b>Total Enrollment:</b> {C21ENPRF}<br>
+          <b>Website:</b> <a href="{WEBADDR}" target="_blank">{WEBADDR}</a>
+        `
       };
 
       // Create the feature layer for colleges and universities
       const usaeduLayer = new FeatureLayer({
         url: "https://services2.arcgis.com/FiaPA4ga0iQKduv3/arcgis/rest/services/Colleges_and_Universities_View/FeatureServer",
-        outFields: ["INSTNM", "C21ENPRF"],
+        outFields: ["INSTNM", "ADDR", "CITY", "STABBR", "ZIP", "C21ENPRF", "WEBADDR"],
         popupTemplate: popupEduusa
       });
 
       // Add the feature layer to the map
       map.add(usaeduLayer);
 
-      // Define ArcGIS Pro standard basemaps
-      const streets = new Basemap({
-        baseLayers: [
-          new TileLayer({
-            portalItem: {
-              id: "8d91bd39e873417ea21673e0fee87604" // World Street Map
-            }
-          })
-        ],
-        title: "Streets",
-        id: "streets"
-      });
-
-      const topographic = new Basemap({
-        baseLayers: [
-          new TileLayer({
-            portalItem: {
-              id: "0f62f2085d2e4ec2b4686df7a5e9a3a3" // World Topographic Map
-            }
-          })
-        ],
-        title: "Topographic",
-        id: "topographic"
-      });
-
-      const navigation = new Basemap({
-        baseLayers: [
-          new TileLayer({
-            portalItem: {
-              id: "dcbbba0edf094eaa81af19298b9c6247" // Navigation
-            }
-          })
-        ],
-        title: "Navigation",
-        id: "navigation"
-      });
-
-      // Create the BasemapGallery widget
+      // Create the BasemapGallery widget with valid basemaps
       const basemapGallery = new BasemapGallery({
         view: view,
-        source: [streets, topographic, navigation] 
+        source: [
+          Basemap.fromId("topo-vector"), // Topographic
+          Basemap.fromId("streets-navigation-vector"), // Streets Navigation
+          Basemap.fromId("streets-vector") // Streets
+        ] 
       });
 
       // Handle any errors
