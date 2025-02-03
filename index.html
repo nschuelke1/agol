@@ -12,7 +12,6 @@
 
   <!-- Adding the modules, API key, and map constant needed for a full screen map -->
   <script>  
-
     require([
       "esri/config", 
       "esri/Map", 
@@ -30,10 +29,10 @@
     ], function(esriConfig, Map, MapView, BasemapGallery, Expand, Basemap, VectorTileLayer, TileLayer, Locate, Search, Graphic, GraphicsLayer, FeatureLayer) {
       
       // API Key
-      esriConfig.apiKey = "AAPTxy8BH1VEsoebNVZXo8HurA_2jA8sPPf_DuV7jRLl5PwtnXSU0EiBd11SD4M-Bxw0UrhfHaqUrAK--XK5L5IK0j28evlBaArQSY23aC17Qiito1RjB1Qy8H8S3JClycEmD7Dd99TBLzTwbaUKyLLbYpVSKpqvRsPyfR0-Ry3hlX6PAyhZuz4NKltWCs0OfwyH850FW-GsaTgcch8s7YzVFUQMQosdGZq291wfW8Q1n9bLJumMXkL8G1QxaFPp8DCUAT1_warqfXUg";
+      esriConfig.apiKey = "AAPK2cb19acc98eb406b80346e85af5aa1ffagWp07_WJVQlFAY2XL6xGrQ86USz9K6UzB1OaBd37PTIlYdHTo04S0-F9ETbr-dC";
       
       const map = new Map({ 
-        basemap: "streets" // Basemap layer service 
+        basemap: "arcgis-topographic" // Basemap layer service 
       }); 
 
       const view = new MapView({
@@ -141,23 +140,60 @@
       // Define the popup for usaeduLayer
       const popupEduusa = {
         title: "EDUs",
-        content: "<b>Name:</b> {NAME}<br><b>Total Enrollment:</b> {TOT_ENROLL}<br>"
+        content: "<b>Name:</b> {INSTNM}<br><b>Total Enrollment:</b> {INSTSIZE}<br>"
       };
 
       // Create the feature layer for colleges and universities
       const usaeduLayer = new FeatureLayer({
         url: "https://services2.arcgis.com/FiaPA4ga0iQKduv3/arcgis/rest/services/Colleges_and_Universities_View/FeatureServer",
-        outFields: ["NAME", "TOT_ENROLL"],
+        outFields: ["INSTNM", "C21ENPRF"],
         popupTemplate: popupEduusa
       });
 
       // Add the feature layer to the map
       map.add(usaeduLayer);
 
+      // Define ArcGIS Pro standard basemaps
+      const streets = new Basemap({
+        baseLayers: [
+          new TileLayer({
+            portalItem: {
+              id: "8d91bd39e873417ea21673e0fee87604" // World Street Map
+            }
+          })
+        ],
+        title: "Streets",
+        id: "streets"
+      });
+
+      const topographic = new Basemap({
+        baseLayers: [
+          new TileLayer({
+            portalItem: {
+              id: "0f62f2085d2e4ec2b4686df7a5e9a3a3" // World Topographic Map
+            }
+          })
+        ],
+        title: "Topographic",
+        id: "topographic"
+      });
+
+      const navigation = new Basemap({
+        baseLayers: [
+          new TileLayer({
+            portalItem: {
+              id: "dcbbba0edf094eaa81af19298b9c6247" // Navigation
+            }
+          })
+        ],
+        title: "Navigation",
+        id: "navigation"
+      });
+
       // Create the BasemapGallery widget
       const basemapGallery = new BasemapGallery({
         view: view,
-        source: [imagery, imageryHybrid, streets, topographic, navigation] 
+        source: [streets, topographic, navigation] 
       });
 
       // Handle any errors
