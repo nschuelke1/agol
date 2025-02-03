@@ -10,8 +10,7 @@
   <link rel="stylesheet" href="https://js.arcgis.com/4.25/esri/themes/light/main.css">
   <script src="https://js.arcgis.com/4.25/"></script>
 
-  <!-- Adding the modules, API key, and map constant needed for a full screen map -->
-  <script>  
+  <script>
     require([
       "esri/config", 
       "esri/Map", 
@@ -39,12 +38,14 @@
         map: map,
         center: [-88.062317, 44.501308], // Longitude, latitude of Green Bay, WI
         zoom: 12, // Adjusted zoom level
-        container: "viewDiv" // Div element
+        container: "viewDiv"
       });
 
       // Add the graphicsLayer
       const graphicsLayer = new GraphicsLayer();  
       map.add(graphicsLayer);
+
+      
 
       // Define the point symbol
       const simpleMarkerSymbol = {  
@@ -154,6 +155,9 @@
         popupTemplate: popupEduusa
       });
 
+
+      
+
       // Add the feature layer to the map
       map.add(usaeduLayer);
 
@@ -187,6 +191,34 @@
 
       // Add the Expand widget to the top-right corner of the view
       view.ui.add(bgExpand, "top-right");
+
+
+      // set up airport icon
+      const airportRenderer = {
+        "type": "simple",
+        "symbol": {
+          "type": "picture-marker",
+          "url": "https://github.io/nschuelke1/agol/blob/main/local_airport_24dp_5F6368.png",
+          "width": "18px",
+          "height": "18px"
+        }
+      };
+
+      // Create the airport feature layer without a popup
+      const airport = new FeatureLayer({
+        url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/NS_US_Airports/FeatureServer",
+        renderer: airportRenderer
+      });
+
+      // Add event listener for layer loading
+      airport.when(() => {
+        console.log("Airport layer loaded");
+      }).catch(err => {
+        console.error("Error loading airport layer: ", err);
+      });
+
+      // Add the airport feature layer to the map
+      map.add(airport);
 
       // Add the Locate widget
       const locateWidget = new Locate({
