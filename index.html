@@ -39,30 +39,30 @@
       const view = new MapView({
         map: map,
         center: [-88.062317, 44.501308], // Longitude, latitude of Green Bay, WI
-        zoom: 17, // Zoom level
+        zoom: 12, // Adjusted zoom level
         container: "viewDiv" // Div element
       });
 
-      // adding the constructor for the graphicsLayer
+      // Add the graphicsLayer
       const graphicsLayer = new GraphicsLayer();  
       map.add(graphicsLayer);
 
-      // diamond point marker at above location
+      // Define the point symbol
       const simpleMarkerSymbol = {  
         type: "simple-marker",  
-        style: "diamond", // Change shape to diamond
-        color: [20, 90, 50],  // Color of blues rock
+        style: "diamond", 
+        color: [20, 90, 50],
         outline: {  
-          color: [247, 220, 111], // White  
+          color: [247, 220, 111], 
           width: 1
         }
       };
 
-      // defining the geometry of the point
+      // Define the point geometry
       const point = { 
         type: "point",  
-        longitude: -88.062317,    // Longitude of Lambeau Field
-        latitude: 44.501308       // Latitude of Lambeau Field
+        longitude: -88.062317,
+        latitude: 44.501308
       };
 
       const popupTemplate = {
@@ -84,29 +84,28 @@
 
       graphicsLayer.add(pointGraphic);
 
-      // Define the polygon's geometry
+      // Define the polygon geometry
       const polygon = {
         type: "polygon",
         rings: [
-          [-88.0634, 44.5036], // Polygon of Lambeau Field Property
+          [-88.0634, 44.5036],
           [-88.0654, 44.5005],
           [-88.0591, 44.4987],
-          [-88.0572, 44.5015],
-    
+          [-88.0572, 44.5015]
         ]
       };
 
-      // Define the symbol for the polygon
+      // Define the polygon symbol
       const fillSymbol = {
         type: "simple-fill",
-        color: [51, 204, 51, 0.25], // Green color with transparency
+        color: [51, 204, 51, 0.25], 
         outline: {
           color: [0, 0, 0],
           width: 1
         }
       };
 
-      // Create the polygon graphic and add to graphicsLayer
+      // Create the polygon graphic and add it to graphicsLayer
       const polygonGraphic = new Graphic({
         geometry: polygon,
         symbol: fillSymbol
@@ -114,24 +113,24 @@
 
       graphicsLayer.add(polygonGraphic);
 
-      // Define the polyline's geometry
+      // Define the polyline geometry
       const polyline = {
         type: "polyline",
         paths: [
-          [-88.045136, 44.496216], // Tundra Lodge to Lambeau Field
-          [-88.044579, 44.497364], // 
+          [-88.045136, 44.496216],
+          [-88.044579, 44.497364],
           [-88.056895, 44.501618]
         ]
       };
 
-      // Define the symbol for the polyline
+      // Define the polyline symbol
       const lineSymbol = {
         type: "simple-line",
-        color: [226, 119, 40], // Orange
+        color: [226, 119, 40], 
         width: 2
       };
 
-      // Create the polyline graphic and add to graphicsLayer
+      // Create the polyline graphic and add it to graphicsLayer
       const polylineGraphic = new Graphic({
         geometry: polyline,
         symbol: lineSymbol
@@ -139,33 +138,29 @@
 
       graphicsLayer.add(polylineGraphic);
 
-
-      // Define a pop-up for usaeduLayer
+      // Define the popup for usaeduLayer
       const popupEduusa = {
-        "title": "EDUs",
-        "content": "<b>Name:</b> {NAME}<br><b>Total Enrollment:</b> {TOT_ENROLL}<br>"
-}
+        title: "EDUs",
+        content: "<b>Name:</b> {NAME}<br><b>Total Enrollment:</b> {TOT_ENROLL}<br>"
+      };
 
-      //adding the Const for the feature layer
+      // Create the feature layer for colleges and universities
       const usaeduLayer = new FeatureLayer({
         url: "https://services2.arcgis.com/FiaPA4ga0iQKduv3/arcgis/rest/services/Colleges_and_Universities_View/FeatureServer",
-
-      //adding the popup here
-        outFields: ["NAME","TOT_ENROLL"],
+        outFields: ["NAME", "TOT_ENROLL"],
         popupTemplate: popupEduusa
       });
 
-      //adding the feature layer to the map
+      // Add the feature layer to the map
       map.add(usaeduLayer);
-
 
       // Create the BasemapGallery widget
       const basemapGallery = new BasemapGallery({
         view: view,
-        source: [imagery, imageryHybrid, streets, topographic, navigation] // Add ArcGIS Pro standard basemaps here
+        source: [imagery, imageryHybrid, streets, topographic, navigation] 
       });
 
-      // Checks for errors
+      // Handle any errors
       view.when(() => {
         basemapGallery.source.basemaps.forEach(basemap => {
           basemap.load().then(() => {
@@ -188,14 +183,14 @@
 
       // Add the Locate widget
       const locateWidget = new Locate({
-        view: view,   // Attaches the Locate button to the view
+        view: view,
         graphic: new Graphic({
           symbol: {
-            type: "simple-marker", // Simple marker symbol
+            type: "simple-marker",
             style: "circle",
             color: "blue",
             size: "12px",
-            outline: { // Outline properties
+            outline: {
               color: "white",
               width: "2px"
             }
