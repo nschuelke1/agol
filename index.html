@@ -41,6 +41,52 @@
         container: "viewDiv"
       });
 
+      
+      // Create the BasemapGallery widget with valid basemaps
+      const basemapGallery = new BasemapGallery({
+        view: view,
+        source: [
+          Basemap.fromId("topo-vector"), // Topographic
+          Basemap.fromId("streets-navigation-vector"), // Streets Navigation
+          Basemap.fromId("streets-vector") // Streets
+        ] 
+      });
+
+      // Handle any errors
+      view.when(() => {
+        basemapGallery.source.basemaps.forEach(basemap => {
+          basemap.load().then(() => {
+            console.log(basemap.title + " loaded successfully");
+          }).catch(err => {
+            console.error("Failed to load basemap: " + basemap.title, err);
+          });
+        });
+      });
+
+      // Create an Expand widget to hold the BasemapGallery
+      const bgExpand = new Expand({
+        view: view,
+        content: basemapGallery,
+        expandIconClass: "esri-icon-basemap"
+      });
+
+      // Add the Expand widget to the top-right corner of the view
+      view.ui.add(bgExpand, "top-right");
+
+
+      // set up airport icon
+      const airportRenderer = {
+        "type": "simple",
+        "symbol": {
+          "type": "picture-marker",
+          "url": "local_airport_24dp_5F6368.png",
+          "width": "18px",
+          "height": "18px"
+        }
+      };
+
+
+
       // Add the graphicsLayer
       const graphicsLayer = new GraphicsLayer();  
       map.add(graphicsLayer);
@@ -161,53 +207,13 @@
       // Add the feature layer to the map
       map.add(usaeduLayer);
 
-      // Create the BasemapGallery widget with valid basemaps
-      const basemapGallery = new BasemapGallery({
-        view: view,
-        source: [
-          Basemap.fromId("topo-vector"), // Topographic
-          Basemap.fromId("streets-navigation-vector"), // Streets Navigation
-          Basemap.fromId("streets-vector") // Streets
-        ] 
-      });
-
-      // Handle any errors
-      view.when(() => {
-        basemapGallery.source.basemaps.forEach(basemap => {
-          basemap.load().then(() => {
-            console.log(basemap.title + " loaded successfully");
-          }).catch(err => {
-            console.error("Failed to load basemap: " + basemap.title, err);
-          });
-        });
-      });
-
-      // Create an Expand widget to hold the BasemapGallery
-      const bgExpand = new Expand({
-        view: view,
-        content: basemapGallery,
-        expandIconClass: "esri-icon-basemap"
-      });
-
-      // Add the Expand widget to the top-right corner of the view
-      view.ui.add(bgExpand, "top-right");
 
 
-      // set up airport icon
-      const airportRenderer = {
-        "type": "simple",
-        "symbol": {
-          "type": "picture-marker",
-          "url": "local_airport_24dp_5F6368.png",
-          "width": "18px",
-          "height": "18px"
-        }
-      };
-
-      // Create the airport feature layer without a popup
+      // Create the airport feature layer
       const airport = new FeatureLayer({
         url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/NS_US_Airports/FeatureServer",
-        renderer: airportRenderer
+        renderer: airportRenderer,
+        definitionExpression: "Fac_Type = 'AIRPORT'" //adding sql to filter for airports
       });
 
       // Add event listener for layer loading
